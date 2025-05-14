@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tone.js Live Guitar FX Rack</title>
+
+  <!-- 1) Your styles must load here -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- 2) Tone.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.39/build/Tone.js"></script>
+  <!-- 3) Your effect‐UI logic, deferred until after DOM parse -->
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <h1>Guitar Effects Rack</h1>
+    <button id="startBtn">Start Processing Audio</button>
+  </header>
+
+  <main>
+    <!-- sliders will be injected here once you click Start -->
+    <div id="effectsContainer"></div>
+  </main>
+</body>
+</html>

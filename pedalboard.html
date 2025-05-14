@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToneFX · Live Pedalboard</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tone.js -->
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.39/build/Tone.js"></script>
+
+  <!-- Effect‑rack logic (your existing main.js) -->
+  <script src="main.js" defer></script>
+
+  <!-- Tailwind tweak: slow‑pulse util -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: { 'pulse-slow': 'pulse 3s cubic-bezier(0.4,0,0.6,1) infinite' }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body class="bg-gradient-to-b from-gray-900 via-black to-gray-900 text-white min-h-screen antialiased">
+
+  <!-- ░░ Header ░░ -->
+  <header class="sticky top-0 z-10 backdrop-blur bg-gray-950/80 shadow-lg">
+    <div class="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
+      <a href="index.html" class="flex items-center gap-2 hover:text-gray-300">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back
+      </a>
+      <h1 class="text-xl sm:text-2xl font-bold tracking-tight">ToneFX · Live Pedalboard</h1>
+      <div class="w-5 h-5"></div>
+    </div>
+  </header>
+
+  <!-- ░░ Pedalboard ░░ -->
+  <main class="mx-auto max-w-6xl px-6 py-12">
+    <p class="text-gray-300 mb-8 leading-relaxed max-w-prose">
+      Click <strong>Start Processing Audio</strong>, allow microphone access, then flip an effect’s switch to reveal its controls.
+    </p>
+
+    <button id="startBtn" class="flex items-center gap-2 mb-10 bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg font-medium text-white shadow-md animate-pulse-slow disabled:animate-none disabled:opacity-50">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Start Processing Audio
+    </button>
+
+    <div id="effectsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- ░░ Footer ░░ -->
+  <footer class="text-center text-gray-500 py-8 border-t border-gray-800">
+    <p>&copy; 2025 ToneFX. Rock on 🤘</p>
+  </footer>
+
+  <!-- ────────────────────────────────────────────────────────── -->
+  <!--  Enhance dynamically injected effect cards                -->
+  <!-- ────────────────────────────────────────────────────────── -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('effectsContainer');
+
+      const obs = new MutationObserver((mutations) => {
+        mutations.forEach((m) => m.addedNodes.forEach((node) => {
+          if (!(node instanceof HTMLElement) || !node.classList.contains('effect-card')) return;
+
+          /* ── Base styling for the card ─────────────────────── */
+          node.classList.add(
+            'bg-gray-800/60', 'backdrop-blur', 'border', 'border-gray-700/40',
+            'rounded-xl', 'p-5', 'shadow-lg', 'transition', 'hover:shadow-xl'
+          );
+
+          /* ── fetch the title element (h3 or h4) ────────────── */
+          let titleEl = node.querySelector('h3') || node.querySelector('h4');
+          if (!titleEl) {
+            titleEl = document.createElement('h3');
+            titleEl.textContent = 'Effect';
+            node.prepend(titleEl);
+          }
+          titleEl.classList.add('font-semibold', 'text-lg');
+
+          /* ── detach param <label> elements for later ───────── */
+          const paramLabels = Array.from(node.querySelectorAll('label'));
+          paramLabels.forEach((l) => l.remove());
+
+          /* ── Toggle switch markup ──────────────────────────── */
+          const toggleLabel = document.createElement('label');
+          toggleLabel.className = 'ml-auto flex items-center cursor-pointer select-none';
+          const toggleInput = document.createElement('input');
+          toggleInput.type = 'checkbox';
+          toggleInput.className = 'sr-only peer';
+          const viz = document.createElement('span');
+          viz.className = 'w-10 h-5 rounded-full bg-gray-600 peer-checked:bg-blue-600 relative after:absolute after:content-[""] after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full after:transition peer-checked:after:translate-x-5';
+          toggleLabel.appendChild(toggleInput);
+          toggleLabel.appendChild(viz);
+
+          /* ── Header row (title + switch) ───────────────────── */
+          const headerRow = document.createElement('div');
+          headerRow.className = 'flex items-center gap-3';
+          headerRow.appendChild(titleEl);
+          headerRow.appendChild(toggleLabel);
+          node.prepend(headerRow);
+
+          /* ── Slider container ──────────────────────────────── */
+          const sliders = document.createElement('div');
+          sliders.className = 'slider-group space-y-6 mt-4 hidden';
+          paramLabels.forEach((l) => {
+            l.classList.add('flex', 'flex-col', 'text-sm', 'space-y-1');
+            const input = l.querySelector('input');
+            if (input) input.classList.add('w-full');
+            sliders.appendChild(l);
+          });
+          node.appendChild(sliders);
+
+          /* ── Toggle behaviour ──────────────────────────────── */
+          toggleInput.addEventListener('change', () => {
+            sliders.classList.toggle('hidden', !toggleInput.checked);
+          });
+        }));
+      });
+
+      obs.observe(container, { childList: true });
+    });
+  </script>
+</body>
+</html>

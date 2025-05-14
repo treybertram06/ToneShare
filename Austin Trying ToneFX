@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tone.js Live Guitar FX Rack</title>
+
+  <!-- 1) Your styles must load here -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- 2) Tone.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.39/build/Tone.js"></script>
+  <!-- 3) Your effect‐UI logic, deferred until after DOM parse -->
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <h1>Guitar Effects Rack</h1>
+    <button id="startBtn">Start Processing Audio</button>
+  </header>
+
+  <main>
+    <!-- sliders will be injected here once you click Start -->
+    <div id="effectsContainer"></div>
+  </main>
+</body>
+</html>
+
+
+
+export default function HomePage() {
+  return (
+    <div className="bg-gradient-to-b from-gray-900 to-black text-white min-h-screen">
+      {/* Header */}
+      <header className="flex items-center justify-between px-6 py-4 shadow-md bg-gray-950">
+        <h1 className="text-2xl font-bold tracking-tight">ToneFX</h1>
+        <nav className="flex gap-4 items-center">
+          <a href="#" className="text-white hover:text-gray-300">Browse</a>
+          <a href="#" className="text-white hover:text-gray-300">Add Tone</a>
+          <a href="#" className="flex items-center text-white hover:text-gray-300">
+            <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 00-3-3.87M4 21v-2a4 4 0 013-3.87m9-6a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            Account
+          </a>
+        </nav>
+      </header>
+
+      {/* Hero Section */}
+      <section className="text-center px-4 py-20">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-6">Dial in the Perfect Tone</h2>
+        <p className="text-gray-400 text-lg max-w-xl mx-auto mb-8">
+          Search or share guitar tone settings for your favorite songs.
+        </p>
+        <form className="flex max-w-xl mx-auto">
+          <input
+            type="text"
+            placeholder="Search by song, artist, gear..."
+            className="w-full px-4 py-2 rounded-l-lg text-black"
+          />
+          <button type="submit" className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-r-lg">
+            <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+        </form>
+      </section>
+
+      {/* Featured Tones Section */}
+      <section className="px-6 py-10">
+        <h3 className="text-2xl font-semibold mb-4">🔥 Trending Tones</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              title: "Song Title 1",
+              artist: "Artist Name",
+              amp: "Fender Deluxe",
+              pedals: "TS9, Big Muff"
+            },
+            {
+              title: "Song Title 2",
+              artist: "Artist Name",
+              amp: "Marshall DSL40",
+              pedals: "RAT, Chorus"
+            },
+            {
+              title: "Song Title 3",
+              artist: "Artist Name",
+              amp: "Vox AC30",
+              pedals: "Delay, Reverb"
+            }
+          ].map((tone, index) => (
+            <div key={index} className="bg-gray-800 p-4 rounded-xl">
+              <h4 className="text-xl font-bold mb-2">{tone.title}</h4>
+              <p className="text-sm text-gray-400">{tone.artist}</p>
+              <p className="mt-2 text-sm">Amp: {tone.amp}</p>
+              <p className="text-sm">Pedals: {tone.pedals}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Upload Tone CTA */}
+      <section className="text-center py-12">
+        <button className="bg-blue-600 hover:bg-blue-500 text-white text-lg px-8 py-4 rounded-2xl flex items-center justify-center mx-auto">
+          <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Upload Your Tone
+        </button>
+      </section>
+
+      {/* Footer */}
+      <footer className="text-center text-gray-500 py-8 border-t border-gray-800">
+        <p>&copy; 2025 ToneFX. Built for guitarists, by guitarists.</p>
+      </footer>
+    </div>
+  );
+}
+export default function AccountPage() {
+  return (
+    <div className="bg-gradient-to-b from-gray-900 to-black text-white min-h-screen px-6 py-10">
+      <header className="flex items-center justify-between mb-10">
+        <h1 className="text-3xl font-bold tracking-tight">Your Account</h1>
+        <button className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl">
+          Logout
+        </button>
+      </header>
+
+      <section className="bg-gray-800 p-6 rounded-2xl mb-10">
+        <h2 className="text-2xl font-semibold mb-4">Profile Information</h2>
+        <div className="flex items-center space-x-6 mb-4">
+          <img
+            src="https://via.placeholder.com/100"
+            alt="Profile Picture"
+            className="w-24 h-24 rounded-full object-cover border-2 border-gray-600"
+          />
+          <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl">
+            Change Picture
+          </button>
+        </div>
+        <div className="space-y-2">
+          <p><strong>Username:</strong> guitarhero92</p>
+          <p><strong>Email:</strong> user@example.com</p>
+        </div>
+      </section>
+
+      <section className="bg-gray-800 p-6 rounded-2xl mb-10">
+        <h2 className="text-2xl font-semibold mb-4">Your Uploaded Tones</h2>
+        <ul className="space-y-4">
+          <li className="border border-gray-700 p-4 rounded-lg">
+            <h3 className="text-lg font-bold">Sweet Child O' Mine</h3>
+            <p className="text-sm text-gray-400">Slash | Marshall JCM800 | Wah, Delay</p>
+          </li>
+          <li className="border border-gray-700 p-4 rounded-lg">
+            <h3 className="text-lg font-bold">Smells Like Teen Spirit</h3>
+            <p className="text-sm text-gray-400">Kurt Cobain | DS-1, Chorus</p>
+          </li>
+        </ul>
+      </section>
+
+      <section className="bg-gray-800 p-6 rounded-2xl mb-10">
+        <h2 className="text-2xl font-semibold mb-4">Saved Tones</h2>
+        <ul className="space-y-4">
+          <li className="border border-gray-700 p-4 rounded-lg">
+            <h3 className="text-lg font-bold">Hotel California</h3>
+            <p className="text-sm text-gray-400">The Eagles | Fender Twin Reverb | Phaser, Reverb</p>
+          </li>
+          <li className="border border-gray-700 p-4 rounded-lg">
+            <h3 className="text-lg font-bold">Back in Black</h3>
+            <p className="text-sm text-gray-400">AC/DC | Marshall Plexi | Overdrive</p>
+          </li>
+        </ul>
+      </section>
+
+      <section className="text-center">
+        <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl">
+          Add New Tone
+        </button>
+      </section>
+    </div>
+  );
+}
+export default function SongSearchPage() {
+  return (
+    <div className="bg-gradient-to-b from-gray-900 to-black text-white min-h-screen px-6 py-10">
+      <header className="flex items-center justify-between mb-10">
+        <h1 className="text-3xl font-bold tracking-tight">Search for a Song</h1>
+        <div className="flex items-center space-x-4">
+          <input
+            type="text"
+            placeholder="Search by Song Title..."
+            className="bg-gray-700 text-white px-4 py-2 rounded-xl w-80"
+          />
+          <button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl">
+            Search
+          </button>
+        </div>
+      </header>
+
+      <section className="bg-gray-800 p-6 rounded-2xl mb-10">
+        <h2 className="text-2xl font-semibold mb-4">Search Results</h2>
+        <ul className="space-y-4">
+          <li className="border border-gray-700 p-4 rounded-lg">
+            <h3 className="text-lg font-bold">Sweet Child O' Mine</h3>
+            <p className="text-sm text-gray-400">Slash | Marshall JCM800 | Wah, Delay</p>
+            <button className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-xl mt-2">
+              View Tone
+            </button>
+          </li>
+          <li className="border border-gray-700 p-4 rounded-lg">
+            <h3 className="text-lg font-bold">Smells Like Teen Spirit</h3>
+            <p className="text-sm text-gray-400">Kurt Cobain | DS-1, Chorus</p>
+            <button className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-xl mt-2">
+              View Tone
+            </button>
+          </li>
+        </ul>
+      </section>
+    </div>
+  );
+}
